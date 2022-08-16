@@ -17,17 +17,19 @@
        set))
 
 (s/defn ^:private replace-cumulative-ags :- mbql.s/Query
-  "Replace `cum-count` and `cum-sum` aggregations in `query` with `count` and `sum` aggregations, respectively."
+  "Replace `cum-count`/`cum-sum`/`percent-of-total` aggregations in `query` with
+  `count`/`sum`/`ratio-to-report(sum(x))` aggregations, respectively."
   [query]
   (mbql.u/replace-in query [:query :aggregation]
     ;; cumulative count doesn't neccesarily have a field-id arg
     [:cum-count]       [:count]
     [:cum-count field] [:count field]
-    [:cum-sum field]   [:sum field]))
+    [:cum-sum field]   [:sum field]
+    [:percent-of-total field] [:ratio-to-report [:sum field]]))
 
 (defn rewrite-cumulative-aggregations
-  "Pre-processing middleware. Rewrite `:cum-count` and `:cum-sum` aggregations as `:count` and `:sum` respectively. Add
-  information about the indecies of the replaced aggregations under the `::replaced-indecies` key."
+  "Pre-processing middleware. Rewrite `:cum-count`/`:cum-sum` aggregations as `count`/`sum` respectively.
+  Add information about the indecies of the replaced aggregations under the `::replaced-indecies` key."
   [{{breakouts :breakout, aggregations :aggregation} :query, :as query}]
   (if-not (mbql.u/match aggregations #{:cum-count :cum-sum})
     query

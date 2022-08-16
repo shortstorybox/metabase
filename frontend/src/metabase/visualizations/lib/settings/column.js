@@ -2,6 +2,7 @@
 import { t } from "ttag";
 import moment from "moment";
 import _ from "underscore";
+import { TYPE } from "metabase/lib/types";
 
 import { nestedSettings } from "./nested";
 import ChartNestedSettingColumns from "metabase/visualizations/components/settings/ChartNestedSettingColumns";
@@ -288,8 +289,15 @@ export const NUMBER_COLUMN_SETTINGS = {
         { name: "Currency", value: "currency" },
       ],
     },
-    getDefault: (column, settings) =>
-      isCurrency(column) && settings["currency"] ? "currency" : "decimal",
+    getDefault: (column, settings) => {
+      if (isCurrency(column) && settings["currency"]) {
+        return "currency";
+      } else if (column.semantic_type === TYPE.Share) {
+        return "percent";
+      } else {
+        return "decimal";
+      }
+    },
     // hide this for currency
     getHidden: (column, settings) =>
       isCurrency(column) && settings["number_style"] === "currency",

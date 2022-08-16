@@ -43,6 +43,7 @@ For an introduction to expressions, check out [Writing expressions in the notebo
   - [log](#log)
   - [lower](#lower)
   - [power](#power)
+  - [ratioToReport](#ratiotoreport)
   - [regexextract](#regexextract)
   - [replace](#replace)
   - [righttrim](#righttrim)
@@ -361,6 +362,15 @@ Example: `power([Length], 2)`. If the length were `3`, the expression would retu
 Databases that don't support `power`: SQLite.
 
 Related: [exp](#exp).
+
+### ratioToReport
+
+Returns the value divided by the sum total for all rows.
+
+Syntax: `ratioToReport(column),` or `ratioToReport(Sum(column))` for Summarize expressions.
+
+Example 1: `ratioToReport([Sales])` would return the value divided by the sum of all results.
+Example 2: `ratioToReport(Sum([Sales]))` same as Example 1, for use in a Summarize expression.
 
 ### regexextract
 

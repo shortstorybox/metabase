@@ -216,6 +216,8 @@
                         [#{} 0]
                         column-info))})))
 
+(defmethod driver/supports? [:mongo :window-functions] [_ _] false)
+
 (doseq [feature [:basic-aggregations
                  :nested-fields
                  :native-parameters]]

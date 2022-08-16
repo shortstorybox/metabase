@@ -147,6 +147,9 @@
     (mbql.u/is-clause? :length expression)
     {:base_type :type/BigInteger}
 
+    (mbql.u/is-clause? :ratio-to-report expression)
+    {:base_type :type/Float, :semantic_type :type/Share}
+
     (mbql.u/is-clause? :case expression)
     (let [[_ clauses] expression]
       (some
@@ -328,6 +331,12 @@
     [:cum-sum _]
     "sum"
 
+    [:ratio-to-report _]
+    "ratio"
+
+    [:percent-of-total _]
+    "ratio"
+
     ;; for any other aggregation just use the name of the clause e.g. `sum`.
     [clause-name & _]
     (name clause-name)))
@@ -366,6 +375,7 @@
     ;; cum-count and cum-sum get names for count and sum, respectively (see explanation in `aggregation-name`)
     [:cum-count   arg]   (tru "Count of {0}"              (aggregation-arg-display-name inner-query arg))
     [:cum-sum     arg]   (tru "Sum of {0}"                (aggregation-arg-display-name inner-query arg))
+    [:percent-of-total arg] (tru "Percent of {0}"         (aggregation-arg-display-name inner-query arg))
     [:stddev      arg]   (tru "SD of {0}"                 (aggregation-arg-display-name inner-query arg))
     [:sum         arg]   (tru "Sum of {0}"                (aggregation-arg-display-name inner-query arg))
     [:min         arg]   (tru "Min of {0}"                (aggregation-arg-display-name inner-query arg))
@@ -417,6 +427,12 @@
      (ag->name-info inner-query &match))
 
     [:share _]
+    (merge
+     {:base_type     :type/Float
+      :semantic_type :type/Share}
+     (ag->name-info inner-query &match))
+
+    [:percent-of-total _]
     (merge
      {:base_type     :type/Float
       :semantic_type :type/Share}
