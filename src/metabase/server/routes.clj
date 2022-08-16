@@ -27,16 +27,18 @@
 
 ;; /public routes. /public/question/:uuid.:export-format redirects to /api/public/card/:uuid/query/:export-format
 (defroutes ^:private public-routes
-  (GET ["/question/:uuid.:export-format", :uuid u/uuid-regex, :export-format api.dataset/export-format-regex]
-       [uuid export-format]
-       (redirect-including-query-string (format "%s/api/public/card/%s/query/%s" (public-settings/site-url) uuid export-format)))
-  (GET "*" [] index/public))
+;; DSHORT STORY ONLY: isable CSV export for security reasons
+;;   (GET ["/question/:uuid.:export-format", :uuid u/uuid-regex, :export-format api.dataset/export-format-regex]
+;;        [uuid export-format]
+;;        (redirect-including-query-string (format "%s/api/public/card/%s/query/%s" (public-settings/site-url) uuid export-format)))
+   (GET "*" [] index/public))
 
 ;; /embed routes. /embed/question/:token.:export-format redirects to /api/public/card/:token/query/:export-format
 (defroutes ^:private embed-routes
-  (GET ["/question/:token.:export-format", :export-format api.dataset/export-format-regex]
-       [token export-format]
-       (redirect-including-query-string (format "%s/api/embed/card/%s/query/%s" (public-settings/site-url) token export-format)))
+;; SHORT STORY ONLY: Disable CSV export for security reasons
+;;   (GET ["/question/:token.:export-format", :export-format api.dataset/export-format-regex]
+;;        [token export-format]
+;;        (redirect-including-query-string (format "%s/api/embed/card/%s/query/%s" (public-settings/site-url) token export-format)))
   (GET "*" [] index/embed))
 
 (defroutes ^{:doc "Top-level ring routes for Metabase."} routes
