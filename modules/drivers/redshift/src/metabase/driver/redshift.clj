@@ -4,6 +4,7 @@
             [clojure.java.jdbc :as jdbc]
             [clojure.tools.logging :as log]
             [honeysql.core :as hsql]
+            [honeysql.format :as hformat]
             [metabase.driver :as driver]
             [metabase.driver.common :as driver.common]
             [metabase.driver.sql-jdbc.common :as sql-jdbc.common]
@@ -18,7 +19,8 @@
             [metabase.query-processor.store :as qp.store]
             [metabase.query-processor.util :as qp.util]
             [metabase.util.honeysql-extensions :as hx]
-            [metabase.util.i18n :refer [trs]])
+            [metabase.util.i18n :refer [trs]]
+            [potemkin :as p])
   (:import [java.sql Connection PreparedStatement ResultSet Types]
            java.time.OffsetTime))
 
@@ -279,6 +281,17 @@
                                                                   metadata
                                                                   schema-inclusion-patterns
                                                                   schema-exclusion-patterns))))
+
+;; Redshift implements RATIO_TO_REPORT natively, so there's no need to fall back on using SUM.
+(p/defrecord+ RatioToReport [identifier]
+  hformat/ToSql
+  (to-sql [_]
+    (str "RATIO_TO_REPORT(" (hformat/to-sql identifier) ") OVER ()")))
+
+(defmethod sql.qp/->honeysql [:redshift :ratio-to-report]
+  [driver [_ arg]]
+  (let [identifier (sql.qp/->honeysql driver arg)]
+    (->RatioToReport identifier)))
 
 (defmethod sql-jdbc.describe-table/describe-table-fields :redshift
   [driver conn {schema :schema, table-name :name :as table} db-name-or-nil]

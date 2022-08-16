@@ -82,6 +82,7 @@
    :max       (deferred-tru "maximum")
    :count     (deferred-tru "number")
    :distinct  (deferred-tru "distinct count")
+   :percent-of-total (deferred-tru "percent of total")
    :stddev    (deferred-tru "standard deviation")
    :cum-count (deferred-tru "cumulative count")
    :cum-sum   (deferred-tru "cumulative sum")})

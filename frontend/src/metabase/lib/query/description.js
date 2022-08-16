@@ -82,6 +82,11 @@ export function getAggregationDescription(tableMetadata, query, options) {
             t`Distinct values of `,
             getFieldName(tableMetadata, aggregation[1], options),
           ];
+        case "percent-of-total":
+          return [
+            t`Percent of `,
+            getFieldName(tableMetadata, aggregation[1], options),
+          ];
         case "stddev":
           return [
             t`Standard deviation of `,
@@ -266,6 +271,8 @@ export function formatAggregationDescription({ aggregation }, options = {}) {
           return [t`Average of `, agg["arg"]];
         case "distinct":
           return [t`Distinct values of `, agg["arg"]];
+        case "percent-of-total":
+          return [t`Percent of `, agg["arg"]];
         case "stddev":
           return [t`Standard deviation of `, agg["arg"]];
         case "sum":

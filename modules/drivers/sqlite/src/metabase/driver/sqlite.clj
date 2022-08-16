@@ -15,7 +15,8 @@
             [metabase.driver.sql.query-processor :as sql.qp]
             [metabase.util.date-2 :as u.date]
             [metabase.util.honeysql-extensions :as hx]
-            [schema.core :as s])
+            [schema.core :as s]
+            [potemkin :as p])
   (:import [java.sql Connection ResultSet Types]
            [java.time LocalDate LocalDateTime LocalTime OffsetDateTime OffsetTime ZonedDateTime]
            java.time.temporal.Temporal))
@@ -23,7 +24,8 @@
 (driver/register! :sqlite, :parent :sql-jdbc)
 
 ;; SQLite does not support a lot of features, so do not show the options in the interface
-(doseq [[feature supported?] {:right-join                             false
+(doseq [[feature supported?] {:window-functions                       true
+                              :right-join                             false
                               :full-join                              false
                               :regex                                  false
                               :percentile-aggregations                false

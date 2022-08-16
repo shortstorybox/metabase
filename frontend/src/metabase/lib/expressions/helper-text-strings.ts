@@ -45,6 +45,18 @@ const helperTextStrings: HelpText[] = [
     ],
   },
   {
+    name: "percent-of-total",
+    structure: "ratioToReport(Sum(" + t`column` + "))",
+    description: t`Calculates the percentage by row, out of the sum total of all rows in the result set.`,
+    example: "ratioToReport(Sum([" + t`Sales` + "]))",
+    args: [
+      {
+        name: t`column`,
+        description: t`The numeric column for which to compute the percentage.`,
+      },
+    ],
+  },
+  {
     name: "stddev",
     structure: "StandardDeviation(" + t`column` + ")",
     description: t`Calculates the standard deviation of the column.`,
@@ -389,6 +401,18 @@ const helperTextStrings: HelpText[] = [
       {
         name: t`column`,
         description: t`The column or number to return the exponential value of.`,
+      },
+    ],
+  },
+  {
+    name: "ratio-to-report",
+    structure: "ratioToReport(" + t`column` + ")",
+    description: t`Divides the value by the sum total of all rows.`,
+    example: "ratioToReport([" + t`Sales` + "])",
+    args: [
+      {
+        name: t`column`,
+        description: t`The numeric column for which to compute the percentage.`,
       },
     ],
   },

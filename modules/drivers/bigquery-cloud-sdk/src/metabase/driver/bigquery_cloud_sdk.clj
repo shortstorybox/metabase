@@ -316,6 +316,8 @@
 
 (defmethod driver/supports? [:bigquery-cloud-sdk :foreign-keys] [_ _] true)
 
+(defmethod driver/supports? [:bigquery-cloud-sdk :window-functions] [_ _] true)
+
 ;; BigQuery is always in UTC
 (defmethod driver/db-default-timezone :bigquery-cloud-sdk [_ _]
   "UTC")

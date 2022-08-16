@@ -56,6 +56,10 @@
 
 (defmethod driver/display-name :postgres [_] "PostgreSQL")
 
+(defmethod driver/database-supports? [:postgres :window-functions]
+  [_driver _feat _db]
+  true)
+
 (defmethod driver/database-supports? [:postgres :persist-models]
   [_driver _feat _db]
   true)

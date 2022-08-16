@@ -22,7 +22,8 @@
             [metabase.util :as u]
             [metabase.util.honeysql-extensions :as hx]
             [metabase.util.i18n :refer [trs]]
-            [metabase.util.ssh :as ssh])
+            [metabase.util.ssh :as ssh]
+            [potemkin :as p])
   (:import com.mchange.v2.c3p0.C3P0ProxyConnection
            [java.sql Connection ResultSet Types]
            [java.time Instant OffsetDateTime ZonedDateTime]
@@ -496,3 +497,15 @@
 (defmethod sql/->prepared-substitution [:oracle Boolean]
   [driver bool]
   (sql/->prepared-substitution driver (if bool 1 0)))
+
+;; Oracle implements RATIO_TO_REPORT natively, so there's no need to fall back on using SUM.
+(p/defrecord+ RatioToReport [identifier]
+  hformat/ToSql
+  (to-sql [_]
+    (str "RATIO_TO_REPORT(" (hformat/to-sql identifier) ") OVER ()")))
+
+(defmethod sql.qp/->honeysql [:oracle :ratio-to-report]
+  [driver [_ arg]]
+  (let [identifier (sql.qp/->honeysql driver arg)]
+    (->RatioToReport identifier)))
+

@@ -38,6 +38,16 @@
 (defmethod hformat/fn-handler "distinct-count" [_ field]
   (str "count(distinct " (hformat/to-sql field) ")"))
 
+;; register the function `ratio-to-report` with HoneySQL
+;;
+;; Only a small subset of databases (H2, Oracle, Redshift, Snowflake)
+;; implement RATIO_TO_REPORT natively. So by default we implement this using
+;; SUM as a window function, which does exactly the same thing.
+;;
+;; (hsql/format (hsql/call :ratio-to-report :x)) -> "x / sum(x) over ()"
+(defmethod hformat/fn-handler "ratio-to-report" [_ field]
+  (str "((" (hformat/to-sql field) ")*1.0 / nullif(sum(" (hformat/to-sql field) ") over (),0))"))
+
 ;; register the function `percentile` with HoneySQL
 ;; (hsql/format (hsql/call :percentile-cont :a 0.9)) -> "percentile_cont(0.9) within group (order by a)"
 (defmethod hformat/fn-handler "percentile-cont" [_ field p]

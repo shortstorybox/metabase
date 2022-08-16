@@ -122,6 +122,7 @@ type CountFieldAgg = ["count", ConcreteField];
 type AvgAgg = ["avg", ConcreteField];
 type CumSumAgg = ["cum-sum", ConcreteField];
 type DistinctAgg = ["distinct", ConcreteField];
+type PercentOfTotal = ["percent-of-total", ConcreteField];
 type StdDevAgg = ["stddev", ConcreteField];
 type SumAgg = ["sum", ConcreteField];
 type MinAgg = ["min", ConcreteField];

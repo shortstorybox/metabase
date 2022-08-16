@@ -164,7 +164,7 @@
 (defn- aggregation-subclause?
   [x]
   (or (when ((some-fn keyword? string?) x)
-        (#{:avg :count :cum-count :distinct :stddev :sum :min :max :+ :- :/ :*
+        (#{:avg :count :cum-count :distinct :percent-of-total :stddev :sum :min :max :+ :- :/ :*
            :sum-where :count-where :share :var :median :percentile}
          (maybe-normalize-token x)))
       (when (mbql-clause? x)
@@ -549,7 +549,7 @@
   [[clause-name field]]
   [clause-name (canonicalize-implicit-field-id field)])
 
-(doseq [clause-name [:avg :cum-sum :distinct :stddev :sum :min :max :median :var]]
+(doseq [clause-name [:avg :cum-sum :distinct :percent-of-total :stddev :sum :min :max :median :var]]
   (defmethod canonicalize-mbql-clause clause-name
     [clause]
     (canonicalize-simple-aggregation-with-field clause)))
