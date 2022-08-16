@@ -38,6 +38,16 @@
 (defmethod hformat/fn-handler "distinct-count" [_ field]
   (str "count(distinct " (hformat/to-sql field) ")"))
 
+;; register the function `percent-of-total-sum` with HoneySQL
+;; (hsql/format (hsql/call :percent-of-total-sum :x)) -> "sum(x) / sum(x) over ()"
+(defmethod hformat/fn-handler "percent-of-total-sum" [_ field]
+  (str "(SUM(" (hformat/to-sql field) ") / SUM(SUM(" (hformat/to-sql field) ")) OVER ())"))
+
+;; register the function `percent-of-total` with HoneySQL
+;; (hsql/format (hsql/call :percent-of-total :x)) -> "x / sum(x) over ()"
+(defmethod hformat/fn-handler "percent-of-total" [_ field]
+  (str "((" (hformat/to-sql field) ") / SUM(" (hformat/to-sql field) ") OVER ())"))
+
 ;; register the function `percentile` with HoneySQL
 ;; (hsql/format (hsql/call :percentile-cont :a 0.9)) -> "percentile_cont(0.9) within group (order by a)"
 (defmethod hformat/fn-handler "percentile-cont" [_ field p]

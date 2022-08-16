@@ -396,6 +396,7 @@
 (defmethod ->honeysql [:sql :median]     [driver [_ field]]   (hsql/call :median          (->honeysql driver field)))
 (defmethod ->honeysql [:sql :percentile] [driver [_ field p]] (hsql/call :percentile-cont (->honeysql driver field) (->honeysql driver p)))
 (defmethod ->honeysql [:sql :distinct]   [driver [_ field]]   (hsql/call :distinct-count  (->honeysql driver field)))
+(defmethod ->honeysql [:sql :percent-of-total-sum] [driver [_ field]] (hsql/call :percent-of-total-sum (->honeysql driver field)))
 (defmethod ->honeysql [:sql :stddev]     [driver [_ field]]   (hsql/call :stddev_pop      (->honeysql driver field)))
 (defmethod ->honeysql [:sql :var]        [driver [_ field]]   (hsql/call :var_pop         (->honeysql driver field)))
 (defmethod ->honeysql [:sql :sum]        [driver [_ field]]   (hsql/call :sum             (->honeysql driver field)))
@@ -410,6 +411,7 @@
 (defmethod ->honeysql [:sql :log]   [driver [_ field]] (hsql/call :log 10 (->honeysql driver field)))
 (defmethod ->honeysql [:sql :exp]   [driver [_ field]] (hsql/call :exp (->honeysql driver field)))
 (defmethod ->honeysql [:sql :sqrt]  [driver [_ field]] (hsql/call :sqrt (->honeysql driver field)))
+(defmethod ->honeysql [:sql :percent-of-total] [driver [_ field]] (hsql/call :percent-of-total (->honeysql driver field)))
 (defmethod ->honeysql [:sql :power] [driver [_ field power]]
   (hsql/call :power (->honeysql driver field) (->honeysql driver power)))
 

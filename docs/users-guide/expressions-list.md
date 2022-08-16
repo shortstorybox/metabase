@@ -16,6 +16,7 @@ For an introduction to expressions, check out [Writing expressions in the notebo
   - [Max](#max)
   - [Median](#median)
   - [Min](#min)
+  - [Percent of total](#percent-of-total)
   - [Percentile](#percentile)
   - [Share](#share)
   - [StandardDeviation](#standarddeviation)
@@ -137,6 +138,15 @@ Syntax: `Min(column)`.
 Example: `Min([Salary])` would find the lowest salary among all salaries in the `Salary` column.
 
 Related: [Max](#max), [Median](#median), [Average](#average).
+
+### Percent of total
+
+Returns the percentage as a fraction of the sum total for all rows.
+
+Syntax: `percentOfTotal(column)` (for custom columns) or `PercentOfTotalSum(column)` (for Summarize expressions).
+
+Example 1: `percentOfTotal([UnitsSold])` would return the value divided by the sum of all results.
+Example 2: `PercentOfTotalSum([Price])` is the same as Example 1, but works inside of a Summarize expression.
 
 ### Percentile
 

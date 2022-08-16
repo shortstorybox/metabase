@@ -366,6 +366,7 @@
     ;; cum-count and cum-sum get names for count and sum, respectively (see explanation in `aggregation-name`)
     [:cum-count   arg]   (tru "Count of {0}"              (aggregation-arg-display-name inner-query arg))
     [:cum-sum     arg]   (tru "Sum of {0}"                (aggregation-arg-display-name inner-query arg))
+    [:percent-of-total-sum arg]   (tru "Percent of total {0}" (aggregation-arg-display-name inner-query arg))
     [:stddev      arg]   (tru "SD of {0}"                 (aggregation-arg-display-name inner-query arg))
     [:sum         arg]   (tru "Sum of {0}"                (aggregation-arg-display-name inner-query arg))
     [:min         arg]   (tru "Min of {0}"                (aggregation-arg-display-name inner-query arg))
