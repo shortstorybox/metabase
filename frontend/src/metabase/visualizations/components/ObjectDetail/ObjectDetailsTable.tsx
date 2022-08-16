@@ -64,6 +64,7 @@ export function DetailsTableCell({
         ...settings.column(column),
         jsx: true,
         rich: true,
+        full_size: true,
       });
       if (typeof cellValue === "string") {
         cellValue = <ExpandableString str={cellValue} length={140} />;
