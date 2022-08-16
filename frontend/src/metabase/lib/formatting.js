@@ -52,6 +52,7 @@ import { currency } from "cljs/metabase.shared.util.currency";
 // single character string specifying date separators
 
 export const FK_SYMBOL = "→";
+export const ROW_HEIGHT_WITH_IMAGE = 130;
 
 const DEFAULT_NUMBER_OPTIONS = {
   compact: false,
@@ -635,13 +636,19 @@ export function formatUrl(value, options = {}) {
 
 export function formatImage(
   value,
-  { jsx, rich, view_as = "auto", link_text } = {},
+  { jsx, rich, view_as = "auto", link_text, full_size } = {},
 ) {
   const url = String(value);
   const protocol = getUrlProtocol(url);
   const acceptedProtocol = protocol === "http:" || protocol === "https:";
   if (jsx && rich && view_as === "image" && acceptedProtocol) {
-    return <img src={url} style={{ height: 30 }} />;
+    const style = {
+      maxHeight: full_size
+        ? "calc(80vh - 4rem - 15px)"
+        : ROW_HEIGHT_WITH_IMAGE - 2,
+      maxWidth: "100%",
+    };
+    return <img src={url} style={style} />;
   } else {
     return url;
   }
