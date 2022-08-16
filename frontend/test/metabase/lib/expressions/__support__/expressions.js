@@ -10,6 +10,7 @@ const metadata = makeMetadata({
         "basic-aggregations",
         "standard-deviation-aggregations",
         "expression-aggregations",
+        "window-functions",
         "percentile-aggregations",
         "foreign-keys",
         "native-parameters",

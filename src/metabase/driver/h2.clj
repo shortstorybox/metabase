@@ -2,6 +2,7 @@
   (:require [clojure.string :as str]
             [clojure.tools.logging :as log]
             [honeysql.core :as hsql]
+            [honeysql.format :as hformat]
             [java-time :as t]
             [metabase.db.jdbc-protocols :as mdb.jdbc-protocols]
             [metabase.db.spec :as mdb.spec]
@@ -17,7 +18,8 @@
             [metabase.util :as u]
             [metabase.util.honeysql-extensions :as hx]
             [metabase.util.i18n :refer [deferred-tru tru]]
-            [metabase.util.ssh :as ssh])
+            [metabase.util.ssh :as ssh]
+            [potemkin :as p])
   (:import [java.sql Clob ResultSet ResultSetMetaData]
            java.time.OffsetTime))
 
@@ -29,7 +31,11 @@
 
 (doseq [[feature supported?] {:full-join               false
                               :regex                   false
-                              :percentile-aggregations false}]
+                              :percentile-aggregations false
+
+                              ;; NOTE: Window functions such as RATIO_TO_REPORT
+                              ;; are only supported by H2 releases >=v1.4.198.
+                              :window-functions        true}]
   (defmethod driver/supports? [:h2 feature] [_ _] supported?))
 
 (defmethod driver/connection-properties :h2
@@ -210,6 +216,17 @@
   [driver [_ field]]
   (hsql/call :log10 (sql.qp/->honeysql driver field)))
 
+;; H2 implemented RATIO_TO_REPORT natively in version 1.4.198. H2 does NOT
+;; allow SUM as a window function, so we have to use the native function.
+(p/defrecord+ RatioToReport [identifier]
+  hformat/ToSql
+  (to-sql [_]
+    (str "RATIO_TO_REPORT(" (hformat/to-sql identifier) ") OVER ()")))
+
+(defmethod sql.qp/->honeysql [:h2 :ratio-to-report]
+  [driver [_ arg]]
+  (let [identifier (sql.qp/->honeysql driver arg)]
+    (->RatioToReport identifier)))
 
 ;;; +----------------------------------------------------------------------------------------------------------------+
 ;;; |                                         metabase.driver.sql-jdbc impls                                         |

@@ -5,6 +5,7 @@
             [clojure.string :as str]
             [clojure.tools.logging :as log]
             [honeysql.core :as hsql]
+            [honeysql.format :as hformat]
             [java-time :as t]
             [medley.core :as m]
             [metabase.driver :as driver]
@@ -24,7 +25,8 @@
             [metabase.util :as u]
             [metabase.util.date-2 :as u.date]
             [metabase.util.honeysql-extensions :as hx]
-            [metabase.util.i18n :refer [trs tru]])
+            [metabase.util.i18n :refer [trs tru]]
+            [potemkin :as p])
   (:import [java.sql ResultSet Types]
            [java.time OffsetDateTime ZonedDateTime]
            metabase.util.honeysql_extensions.Identifier))
@@ -375,3 +377,15 @@
 (defmethod sql-jdbc.execute/set-parameter [:snowflake java.time.ZonedDateTime]
   [driver ps i t]
   (sql-jdbc.execute/set-parameter driver ps i (t/sql-timestamp (t/with-zone-same-instant t (t/zone-id "UTC")))))
+
+;; Snowflake implements RATIO_TO_REPORT natively, so there's no need to fall back on using SUM.
+(p/defrecord+ RatioToReport [identifier]
+  hformat/ToSql
+  (to-sql [_]
+    (str "RATIO_TO_REPORT(" (hformat/to-sql identifier) ") OVER ()")))
+
+(defmethod sql.qp/->honeysql [:snowflake :ratio-to-report]
+  [driver [_ arg]]
+  (let [identifier (sql.qp/->honeysql driver arg)]
+    (->RatioToReport identifier)))
+

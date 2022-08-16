@@ -387,6 +387,9 @@
     ;; Does this driver support standard deviation and variance aggregations?
     :standard-deviation-aggregations
 
+    ;; Does the driver support basic window functions like `sum(x) over ()`
+    :window-functions
+
     ;; Does this driver support expressions (e.g. adding the values of 2 columns together)?
     :expressions
 

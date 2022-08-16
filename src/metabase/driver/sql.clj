@@ -16,6 +16,7 @@
 (driver/register! :sql, :abstract? true)
 
 (doseq [feature [:standard-deviation-aggregations
+                 :window-functions
                  :foreign-keys
                  :expressions
                  :expression-aggregations
