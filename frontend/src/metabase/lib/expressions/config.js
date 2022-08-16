@@ -86,6 +86,11 @@ export const MBQL_CLAUSES = {
     type: "aggregation",
     args: ["expression"],
   },
+  "percent-of-total-sum": {
+    displayName: `PercentOfTotalSum`,
+    type: "aggregation",
+    args: ["number"],
+  },
   stddev: {
     displayName: `StandardDeviation`,
     type: "aggregation",
@@ -201,6 +206,11 @@ export const MBQL_CLAUSES = {
     type: "number",
     args: ["number"],
     requiresFeature: "advanced-math-expressions",
+  },
+  "percent-of-total": {
+    displayName: `percentOfTotal`,
+    type: "number",
+    args: ["number"],
   },
   // boolean functions
   contains: {
@@ -371,6 +381,7 @@ export const AGGREGATION_FUNCTIONS = new Set([
   "sum",
   "cum-sum",
   "distinct",
+  "percent-of-total-sum",
   "stddev",
   "avg",
   "min",
@@ -402,6 +413,7 @@ export const EXPRESSION_FUNCTIONS = new Set([
   "power",
   "log",
   "exp",
+  "percent-of-total",
   // boolean
   "contains",
   "ends-with",
@@ -464,6 +476,7 @@ export const STANDARD_AGGREGATIONS = new Set([
   "sum",
   "cum-sum",
   "distinct",
+  "percent-of-total-sum",
   "stddev",
   "avg",
   "min",

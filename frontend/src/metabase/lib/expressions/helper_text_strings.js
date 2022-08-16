@@ -42,6 +42,18 @@ const helperTextStrings = [
     ],
   },
   {
+    name: "percent-of-total-sum",
+    structure: "PercentOfTotalSum(" + t`column` + ")",
+    description: t`Calculates the percentage by row, out of the sum total of all rows in the result set.`,
+    example: "PercentOfTotalSum([" + t`UnitsSold` + "])",
+    args: [
+      {
+        name: t`column`,
+        description: t`The numeric column for which to compute the percentage.`,
+      },
+    ],
+  },
+  {
     name: "stddev",
     structure: "StandardDeviation(" + t`column` + ")",
     description: t`Calculates the standard deviation of the column.`,
@@ -386,6 +398,18 @@ const helperTextStrings = [
       {
         name: t`column`,
         description: t`The column or number to return the exponential value of.`,
+      },
+    ],
+  },
+  {
+    name: "percent-of-total",
+    structure: "percentOfTotal(" + t`column` + ")",
+    description: t`Calculates the percentage by row, out of the sum total of all rows in the result set.`,
+    example: "percentOfTotal([" + t`UnitsSold` + "])",
+    args: [
+      {
+        name: t`column`,
+        description: t`The numeric column for which to compute the percentage.`,
       },
     ],
   },

@@ -454,13 +454,13 @@
 
 (def arithmetic-expressions
   "Set of valid arithmetic expression clause keywords."
-  #{:+ :- :/ :* :coalesce :length :round :ceil :floor :abs :power :sqrt :log :exp :case})
+  #{:+ :- :/ :* :coalesce :length :round :ceil :floor :abs :power :sqrt :log :exp :percent-of-total :case})
 
 (def boolean-expressions
   "Set of valid boolean expression clause keywords."
   #{:and :or :not :< :<= :> :>= := :!=})
 
-(def ^:private aggregations #{:sum :avg :stddev :var :median :percentile :min :max :cum-count :cum-sum :count-where :sum-where :share :distinct :metric :aggregation-options :count})
+(def ^:private aggregations #{:sum :avg :percent-of-total-sum :stddev :var :median :percentile :min :max :cum-count :cum-sum :count-where :sum-where :share :distinct :metric :aggregation-options :count})
 
 (declare ArithmeticExpression)
 (declare BooleanExpression)
@@ -579,6 +579,9 @@
   x NumericExpressionArg)
 
 (defclause ^{:requires-features #{:advanced-math-expressions}} log
+  x NumericExpressionArg)
+
+(defclause ^{:requires-features #{:basic-aggregations}} percent-of-total
   x NumericExpressionArg)
 
 (declare ArithmeticExpression*)
@@ -759,7 +762,7 @@
   clauses CaseClauses, options (optional CaseOptions))
 
 (def ^:private ArithmeticExpression*
-  (one-of + - / * coalesce length floor ceil round abs power sqrt exp log case))
+  (one-of + - / * coalesce length floor ceil round abs power sqrt exp log percent-of-total case))
 
 (def ^:private StringExpression*
   (one-of substring trim ltrim rtrim replace lower upper concat regex-match-first coalesce case))
@@ -809,6 +812,9 @@
 (defclause ^{:requires-features #{:basic-aggregations}} share
   pred Filter)
 
+(defclause ^{:requires-features #{:basic-aggregations}} percent-of-total-sum
+  field-or-expression NumericExpressionArg)
+
 (defclause ^{:requires-features #{:standard-deviation-aggregations}} stddev
   field-or-expression FieldOrExpressionDef)
 
@@ -837,7 +843,7 @@
 (def ^:private UnnamedAggregation*
   (s/if (partial is-clause? arithmetic-expressions)
     ArithmeticExpression
-    (one-of count avg cum-count cum-sum distinct stddev sum min max metric share count-where
+    (one-of count avg cum-count cum-sum distinct percent-of-total-sum stddev sum min max metric share count-where
             sum-where case median percentile ag:var)))
 
 (def ^:private UnnamedAggregation

@@ -311,6 +311,7 @@ describe("schema_metadata", () => {
         "distinct",
         "cum-sum",
         "cum-count",
+        "percent-of-total-sum",
         "min",
         "max",
       ]);
@@ -419,30 +420,34 @@ describe("schema_metadata", () => {
     });
 
     describe("summable operators", () => {
-      ["sum", "avg", "cum-sum", "stddev"].forEach(operator => {
-        describe(operator, () => {
-          it("is not available without fields", () => {
-            const { operators } = setup();
-            expect(operators).toEqual(expect.not.arrayContaining([operator]));
-          });
-
-          it("is not available without summable fields", () => {
-            const { operators } = setup({
-              fields: [PK, FK, ADDRESS, ...STRINGS, ...TEMPORALS],
+      ["sum", "avg", "cum-sum", "percent-of-total-sum", "stddev"].forEach(
+        operator => {
+          describe(operator, () => {
+            it("is not available without fields", () => {
+              const { operators } = setup();
+              expect(operators).toEqual(expect.not.arrayContaining([operator]));
             });
-            expect(operators).toEqual(expect.not.arrayContaining([operator]));
-          });
 
-          ["base_type", "effective_type", "semantic_type"].forEach(type => {
-            it(`is available with numeric field's ${type}`, () => {
-              const field = { [type]: TYPE.Number };
-              const { operators, operatorByName } = setup({ fields: [field] });
-              expect(operators).toEqual(expect.arrayContaining([operator]));
-              expect(operatorByName[operator].fields[0]).toEqual([field]);
+            it("is not available without summable fields", () => {
+              const { operators } = setup({
+                fields: [PK, FK, ADDRESS, ...STRINGS, ...TEMPORALS],
+              });
+              expect(operators).toEqual(expect.not.arrayContaining([operator]));
+            });
+
+            ["base_type", "effective_type", "semantic_type"].forEach(type => {
+              it(`is available with numeric field's ${type}`, () => {
+                const field = { [type]: TYPE.Number };
+                const { operators, operatorByName } = setup({
+                  fields: [field],
+                });
+                expect(operators).toEqual(expect.arrayContaining([operator]));
+                expect(operatorByName[operator].fields[0]).toEqual([field]);
+              });
             });
           });
-        });
-      });
+        },
+      );
     });
 
     describe("scoping operators", () => {

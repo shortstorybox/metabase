@@ -50,6 +50,7 @@
                              [:cum-count]     {:type :cum-count}
                              [:avg arg]       {:type :avg :arg (field-name arg)}
                              [:distinct arg]  {:type :distinct :arg (field-name arg)}
+                             [:percent-of-total-sum arg]    {:type :percent-of-total-sum :arg (field-name arg)}
                              [:stddev arg]    {:type :stddev :arg (field-name arg)}
                              [:sum arg]       {:type :sum :arg (field-name arg)}
                              [:cum-sum arg]   {:type :cum-sum :arg (field-name arg)}
