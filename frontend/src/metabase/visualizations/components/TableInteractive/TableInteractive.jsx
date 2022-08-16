@@ -17,6 +17,7 @@ import Button from "metabase/core/components/Button";
 import Tooltip from "metabase/components/Tooltip";
 
 import { formatValue } from "metabase/lib/formatting";
+import { ROW_HEIGHT_WITH_IMAGE } from "metabase/lib/formatting/image";
 import { isID, isPK, isFK } from "metabase/lib/schema_metadata";
 import {
   getTableCellClickedObject,
@@ -909,6 +910,16 @@ class TableInteractive extends Component {
       : Math.min(fullWidth, TRUNCATE_WIDTH);
   };
 
+  rowHeight = () => {
+    const hasImageColumn =
+      this.props.data &&
+      this.props.data.cols &&
+      this.props.data.cols.some(
+        col => this.props.settings.column(col).view_as === "image",
+      );
+    return hasImageColumn ? ROW_HEIGHT_WITH_IMAGE : ROW_HEIGHT;
+  };
+
   handleHoverRow = (event, rowIndex) => {
     const hoverDetailEl = this.detailShortcutRef.current;
 
@@ -923,13 +934,14 @@ class TableInteractive extends Component {
       const gutterTop = event.currentTarget?.getBoundingClientRect()?.top;
       const fromTop = event.clientY - gutterTop;
 
-      const newIndex = Math.floor((fromTop + scrollOffset) / ROW_HEIGHT);
+      const rowHeight = this.rowHeight();
+      const newIndex = Math.floor((fromTop + scrollOffset) / rowHeight);
 
       if (newIndex >= this.props.data.rows.length) {
         return;
       }
       hoverDetailEl.classList.add("show");
-      hoverDetailEl.style.top = `${newIndex * ROW_HEIGHT - scrollOffset}px`;
+      hoverDetailEl.style.top = `${newIndex * rowHeight - scrollOffset}px`;
       hoverDetailEl.dataset.showDetailRowindex = newIndex;
       hoverDetailEl.onclick = this.pkClick(newIndex);
       return;
@@ -971,6 +983,7 @@ class TableInteractive extends Component {
 
     const headerHeight = this.props.tableHeaderHeight || HEADER_HEIGHT;
     const gutterColumn = this.state.showDetailShortcut ? 1 : 0;
+    const rowHeight = this.rowHeight();
 
     return (
       <ScrollSync>
@@ -1028,7 +1041,10 @@ class TableInteractive extends Component {
                     onMouseMove={this.handleHoverRow}
                     onMouseLeave={this.handleLeaveRow}
                   >
-                    <DetailShortcut ref={this.detailShortcutRef} />
+                    <DetailShortcut
+                      ref={this.detailShortcutRef}
+                      height={rowHeight}
+                    />
                   </div>
                 </>
               )}
@@ -1078,7 +1094,7 @@ class TableInteractive extends Component {
                 columnCount={cols.length + gutterColumn}
                 columnWidth={this.getDisplayColumnWidth}
                 rowCount={rows.length}
-                rowHeight={ROW_HEIGHT}
+                rowHeight={rowHeight}
                 cellRenderer={props =>
                   gutterColumn && props.columnIndex === 0
                     ? () => null // we need a phantom cell to properly offset columns
@@ -1144,7 +1160,7 @@ export default _.compose(
   ),
 )(TableInteractive);
 
-const DetailShortcut = React.forwardRef((_props, ref) => (
+const DetailShortcut = React.forwardRef(({ height }, ref) => (
   <div
     id="detail-shortcut"
     className="TableInteractive-cellWrapper cursor-pointer"
@@ -1153,7 +1169,7 @@ const DetailShortcut = React.forwardRef((_props, ref) => (
       position: "absolute",
       left: 0,
       top: 0,
-      height: ROW_HEIGHT,
+      height: height,
       width: SIDEBAR_WIDTH,
       zIndex: 3,
     }}

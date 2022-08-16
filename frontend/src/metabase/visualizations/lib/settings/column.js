@@ -487,6 +487,9 @@ export function getSettingDefintionsForColumn(series, column) {
     };
   } else {
     return {
+      view_as: {
+        getValue: (value, settings) => (settings ? settings.view_as : null),
+      },
       ...extraColumnSettings,
       ...COMMON_COLUMN_SETTINGS,
     };
