@@ -23,6 +23,7 @@
                                       ::sql.qp.empty-string-is-null/empty-string-is-null})
 
 (defmethod driver/supports? [:vertica :percentile-aggregations] [_ _] false)
+(defmethod driver/supports? [:vertica :window-functions] [_ _] true)
 
 (defmethod driver/db-start-of-week :vertica
   [_]

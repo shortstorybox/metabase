@@ -51,7 +51,7 @@
 
 (defmethod driver/supports? [:mysql :regex] [_ _] false)
 (defmethod driver/supports? [:mysql :percentile-aggregations] [_ _] false)
-
+(defmethod driver/supports? [:mysql :window-functions] [_ _] true)
 
 ;;; +----------------------------------------------------------------------------------------------------------------+
 ;;; |                                             metabase.driver impls                                              |

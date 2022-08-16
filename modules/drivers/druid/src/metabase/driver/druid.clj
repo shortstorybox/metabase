@@ -44,7 +44,8 @@
     respond))
 
 (doseq [[feature supported?] {:set-timezone            true
-                              :expression-aggregations true}]
+                              :expression-aggregations true
+                              :window-functions        false}]
   (defmethod driver/supports? [:druid feature] [_ _] supported?))
 
 (defmethod driver/db-start-of-week :druid
