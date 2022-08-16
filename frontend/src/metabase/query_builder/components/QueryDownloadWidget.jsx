@@ -30,6 +30,7 @@ const getLimitedDownloadSizeText = result =>
   PLUGIN_FEATURE_LEVEL_PERMISSIONS.getDownloadWidgetMessageOverride(result) ??
   t`The maximum download size is 1 million rows.`;
 
+const DISABLE_DATA_EXPORT = true; // SHORT STORY ONLY: Disable download widget for security reasons
 const QueryDownloadWidget = ({
   className,
   classNameClose,
@@ -43,6 +44,10 @@ const QueryDownloadWidget = ({
   visualizationSettings,
 }) => {
   const [status, setStatus] = useState(`idle`);
+
+  if (DISABLE_DATA_EXPORT) {
+    return <div />; // SHORT STORY ONLY: Disable download widget for security reasons
+  }
 
   return (
     <PopoverWithTrigger
