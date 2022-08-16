@@ -207,6 +207,7 @@
                               :expressions                     true
                               :native-parameters               true
                               :expression-aggregations         true
+                              :window-functions                true
                               :binning                         true
                               :foreign-keys                    true}]
   (defmethod driver/supports? [:presto-common feature] [_ _] supported?))

@@ -661,6 +661,15 @@ const AGGREGATION_OPERATORS = [
     requiredDriverFeature: "basic-aggregations",
   },
   {
+    short: "percent-of-total",
+    name: t`Percent of total ...`,
+    columnName: t`Percentage`,
+    description: t`Percentage out of the sum total of results.`,
+    validFieldsFilters: [summableFields],
+    requiresField: true,
+    requiredDriverFeature: "window-functions",
+  },
+  {
     short: "stddev",
     name: t`Standard deviation of ...`,
     columnName: t`Standard deviation`, // NOTE: actually "SD" as of 2019-10-01
