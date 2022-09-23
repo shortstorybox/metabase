@@ -42,7 +42,6 @@ const STEP_UI = {
   },
   join: {
     title: t`Join data`,
-    icon: "join_left_outer",
     component: JoinStep,
     priority: 1,
     getColor: () => c("brand"),
