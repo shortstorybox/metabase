@@ -53,7 +53,7 @@ const GoogleButton = ({
             onSuccess={handleLogin}
             onError={handleError}
             locale={locale}
-            width="366"
+            width={366}
           />
         </GoogleOAuthProvider>
       ) : (
